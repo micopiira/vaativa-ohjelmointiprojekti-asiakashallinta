@@ -6,13 +6,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 public abstract class JpaRepository<T, ID> implements Repository<T, ID> {
-	protected EntityManagerFactory entityManagerFactory;
+
+	EntityManagerFactory entityManagerFactory;
 
 	@Override
 	public void delete(T entity) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		entityManager.remove(entity);
+		entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
 		entityManager.getTransaction().commit();
 	}
 

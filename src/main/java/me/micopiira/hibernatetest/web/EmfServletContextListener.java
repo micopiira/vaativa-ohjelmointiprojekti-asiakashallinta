@@ -12,7 +12,6 @@ public class EmfServletContextListener implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		System.out.println("contextInitialized");
 		sce.getServletContext().setAttribute(
 				EntityManagerFactory.class.getName(),
 				Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME)
@@ -21,7 +20,6 @@ public class EmfServletContextListener implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		System.out.println("contextDestroyed");
 		((EntityManagerFactory) sce.getServletContext().getAttribute(EntityManagerFactory.class.getName())).close();
 	}
 }

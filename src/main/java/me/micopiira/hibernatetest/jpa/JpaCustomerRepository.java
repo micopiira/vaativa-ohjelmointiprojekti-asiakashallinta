@@ -19,6 +19,14 @@ public class JpaCustomerRepository extends JpaRepository<Customer, Long> impleme
 	}
 
 	@Override
+	public void deleteById(Long id) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.remove(entityManager.getReference(Customer.class, id));
+		entityManager.getTransaction().commit();
+	}
+
+	@Override
 	public Customer findOne(Long id) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
