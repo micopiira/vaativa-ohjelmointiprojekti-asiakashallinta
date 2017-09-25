@@ -13,23 +13,32 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @WebServlet("/")
 public class DispatcherServlet extends HttpServlet {
 
-	private Map<String, BiFunction<HttpServletRequest, HttpServletResponse, Response>> routes = new HashMap<>();
+	private Map<String, Function<HttpServletRequest, Supplier<Response>>> routes = new HashMap<>();
 
 	@Override
 	public void init() throws ServletException {
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute(EntityManagerFactory.class.getName());
-		CustomerController customerController = new CustomerController(new JpaCustomerRepository(emf));
-		routes.put("/", customerController::list);
-		routes.put("/delete", customerController::delete);
-		routes.put("/create", customerController::create);
+
+		Function<HttpServletRequest, CustomerController> customerControllerSupplier = req -> {
+			CustomerController controller = new CustomerController(new JpaCustomerRepository(emf));
+			controller.setRequest(req);
+			return controller;
+		};
+
+		routes.put("/", req -> customerControllerSupplier.apply(req)::list);
+		routes.put("/delete", req -> customerControllerSupplier.apply(req)::delete);
+		routes.put("/create", req -> customerControllerSupplier.apply(req)::create);
 	}
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		routes.get(req.getRequestURI().substring(req.getContextPath().length())).apply(req, res).execute(req, res);
+		routes.get(req.getRequestURI().substring(req.getContextPath().length()))
+				.apply(req).get().execute(req, res);
 	}
 }

@@ -9,15 +9,15 @@ import java.util.function.Function;
 
 public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
 
-	EntityManagerFactory entityManagerFactory;
+	private EntityManagerFactory entityManagerFactory;
 	private final Class<T> entityClass;
 
-	public JpaRepository(EntityManagerFactory entityManagerFactory, Class<T> entityClass) {
+	JpaRepository(EntityManagerFactory entityManagerFactory, Class<T> entityClass) {
 		this.entityManagerFactory = entityManagerFactory;
 		this.entityClass = entityClass;
 	}
 
-	protected <S> S transactional(Function<EntityManager, S> function) {
+	private <S> S transactional(Function<EntityManager, S> function) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		S result = function.apply(entityManager);
@@ -28,9 +28,7 @@ public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
 
 	@Override
 	public List<T> findAll() {
-		return transactional(em ->
-			em.createQuery("from " + entityClass.getName(), entityClass).getResultList()
-		);
+		return transactional(em -> em.createQuery("from " + entityClass.getName(), entityClass).getResultList());
 	}
 
 	@Override
@@ -51,9 +49,7 @@ public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
 
 	@Override
 	public T findOne(ID id) {
-		return transactional(em ->
-			em.find(entityClass, id)
-		);
+		return transactional(em -> em.find(entityClass, id));
 	}
 
 	@Override
@@ -62,10 +58,6 @@ public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
 			em.remove(em.getReference(entityClass, id));
 			return null;
 		});
-	}
-
-	public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-		this.entityManagerFactory = entityManagerFactory;
 	}
 
 }
