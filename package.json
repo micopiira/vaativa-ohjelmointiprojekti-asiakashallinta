@@ -1,0 +1,27 @@
+{
+  "name": "hibernatetest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/micopiira/vaativa-ohjelmointiprojekti-asiakashallinta.git",
+  "author": "Mico Piira <mico.piira@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "bootstrap": "4.0.0-beta",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.2",
+    "jquery": "^3.2.1",
+    "popper.js": "^1.12.5",
+    "style-loader": "^0.18.2",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.6.0"
+  },
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "dependencies": {
+    "font-awesome": "^4.7.0"
+  }
+}

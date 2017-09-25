@@ -18,22 +18,18 @@ import java.util.function.BiFunction;
 public class DispatcherServlet extends HttpServlet {
 
 	private Map<String, BiFunction<HttpServletRequest, HttpServletResponse, Response>> routes = new HashMap<>();
-	private final JpaCustomerRepository customerRepository = new JpaCustomerRepository();
 
-	public DispatcherServlet() {
-		CustomerController customerController = new CustomerController(customerRepository);
+	@Override
+	public void init() throws ServletException {
+		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute(EntityManagerFactory.class.getName());
+		CustomerController customerController = new CustomerController(new JpaCustomerRepository(emf));
 		routes.put("/", customerController::list);
 		routes.put("/delete", customerController::delete);
 		routes.put("/create", customerController::create);
 	}
 
 	@Override
-	public void init() throws ServletException {
-		customerRepository.setEntityManagerFactory((EntityManagerFactory) getServletContext().getAttribute(EntityManagerFactory.class.getName()));
-	}
-
-	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		routes.get(req.getRequestURI()).apply(req, res).execute(req, res);
+		routes.get(req.getRequestURI().substring(req.getContextPath().length())).apply(req, res).execute(req, res);
 	}
 }
