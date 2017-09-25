@@ -7,10 +7,13 @@ import me.micopiira.hibernatetest.framework.web.response.ForwardResponse;
 import me.micopiira.hibernatetest.framework.web.response.RedirectResponse;
 import me.micopiira.hibernatetest.framework.web.response.Response;
 
+import javax.inject.Inject;
+
 public class CustomerController extends Controller {
 
 	private final CustomerRepository customerRepository;
 
+	@Inject
 	public CustomerController(CustomerRepository customerRepository) {
 		this.customerRepository = customerRepository;
 	}

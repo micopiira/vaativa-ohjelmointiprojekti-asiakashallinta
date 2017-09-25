@@ -19,6 +19,10 @@
           <element id="library" level="project" name="Maven: org.hibernate.common:hibernate-commons-annotations:5.0.1.Final" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.7-dmr" />
           <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
+          <element id="library" level="project" name="Maven: com.google.inject:guice:no_aop:4.0" />
+          <element id="library" level="project" name="Maven: javax.inject:javax.inject:1" />
+          <element id="library" level="project" name="Maven: aopalliance:aopalliance:1.0" />
+          <element id="library" level="project" name="Maven: com.google.guava:guava:16.0.1" />
         </element>
       </element>
       <element id="directory" name="META-INF">

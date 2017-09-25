@@ -1,5 +1,8 @@
 package me.micopiira.hibernatetest.web;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import me.micopiira.hibernatetest.domain.CustomerRepository;
 import me.micopiira.hibernatetest.jpa.JpaCustomerRepository;
 import me.micopiira.hibernatetest.web.CustomerController;
@@ -22,23 +25,17 @@ import java.util.function.Supplier;
 public class DispatcherServlet extends HttpServlet {
 
 	private final Map<String, Function<HttpServletRequest, Supplier<Response>>> routes = new HashMap<>();
-	private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("test");
 
 	public DispatcherServlet() {
-		final CustomerRepository customerRepository = new JpaCustomerRepository(entityManagerFactory);
 		final Function<HttpServletRequest, CustomerController> customerControllerSupplier = req -> {
-			final CustomerController controller = new CustomerController(customerRepository);
+			final Injector injector = (Injector) getServletContext().getAttribute(Injector.class.getName());
+			final CustomerController controller = injector.getInstance(CustomerController.class);
 			controller.setRequest(req);
 			return controller;
 		};
 		routes.put("/", req -> customerControllerSupplier.apply(req)::list);
 		routes.put("/delete", req -> customerControllerSupplier.apply(req)::delete);
 		routes.put("/create", req -> customerControllerSupplier.apply(req)::create);
-	}
-
-	@Override
-	public void destroy() {
-		entityManagerFactory.close();
 	}
 
 	@Override
