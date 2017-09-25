@@ -5,6 +5,7 @@ import me.micopiira.hibernatetest.framework.repository.CrudRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
@@ -15,6 +16,13 @@ public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
 	protected JpaRepository(EntityManagerFactory entityManagerFactory, Class<T> entityClass) {
 		this.entityManagerFactory = entityManagerFactory;
 		this.entityClass = entityClass;
+	}
+
+	private void transactionalVoid(Consumer<EntityManager> consumer) {
+		transactional(entityManager -> {
+			consumer.accept(entityManager);
+			return null;
+		});
 	}
 
 	private <S> S transactional(Function<EntityManager, S> function) {
@@ -33,10 +41,9 @@ public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
 
 	@Override
 	public void delete(T entity) {
-		transactional(em -> {
-			em.remove(em.contains(entity) ? entity : em.merge(entity));
-			return null;
-		});
+		transactionalVoid(em ->
+			em.remove(em.contains(entity) ? entity : em.merge(entity))
+		);
 	}
 
 	@Override
@@ -54,10 +61,7 @@ public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
 
 	@Override
 	public void deleteById(ID id) {
-		transactional(em -> {
-			em.remove(em.getReference(entityClass, id));
-			return null;
-		});
+		transactionalVoid(em -> em.remove(em.getReference(entityClass, id)));
 	}
 
 }
