@@ -31,7 +31,7 @@ public class CustomerController extends Controller {
 
 	public Response list() {
 		getRequest().setAttribute("customers", customerRepository.findAll());
-		return new ForwardResponse("list.jsp");
+		return new ForwardResponse("/customers/list.jsp");
 	}
 
 }
