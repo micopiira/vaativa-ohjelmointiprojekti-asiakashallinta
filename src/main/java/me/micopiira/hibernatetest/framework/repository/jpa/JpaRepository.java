@@ -1,6 +1,6 @@
-package me.micopiira.hibernatetest.jpa;
+package me.micopiira.hibernatetest.framework.repository.jpa;
 
-import me.micopiira.hibernatetest.repository.CrudRepository;
+import me.micopiira.hibernatetest.framework.repository.CrudRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -9,18 +9,18 @@ import java.util.function.Function;
 
 public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
 
-	private EntityManagerFactory entityManagerFactory;
+	private final EntityManagerFactory entityManagerFactory;
 	private final Class<T> entityClass;
 
-	JpaRepository(EntityManagerFactory entityManagerFactory, Class<T> entityClass) {
+	protected JpaRepository(EntityManagerFactory entityManagerFactory, Class<T> entityClass) {
 		this.entityManagerFactory = entityManagerFactory;
 		this.entityClass = entityClass;
 	}
 
 	private <S> S transactional(Function<EntityManager, S> function) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		final EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		S result = function.apply(entityManager);
+		final S result = function.apply(entityManager);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		return result;

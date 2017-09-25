@@ -1,4 +1,4 @@
-package me.micopiira.hibernatetest.web;
+package me.micopiira.hibernatetest.framework.web.response;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

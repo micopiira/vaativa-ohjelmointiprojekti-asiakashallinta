@@ -2,12 +2,10 @@ package me.micopiira.hibernatetest.web;
 
 import me.micopiira.hibernatetest.domain.Customer;
 import me.micopiira.hibernatetest.domain.CustomerRepository;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.Optional;
+import me.micopiira.hibernatetest.framework.web.Controller;
+import me.micopiira.hibernatetest.framework.web.response.ForwardResponse;
+import me.micopiira.hibernatetest.framework.web.response.RedirectResponse;
+import me.micopiira.hibernatetest.framework.web.response.Response;
 
 public class CustomerController extends Controller {
 
@@ -24,7 +22,7 @@ public class CustomerController extends Controller {
 	}
 
 	public Response create() {
-		Customer customer = new Customer();
+		final Customer customer = new Customer();
 		customer.setName(getRequiredParameter("name"));
 		customerRepository.save(customer);
 		addMessage("customer.created");

@@ -1,4 +1,4 @@
-package me.micopiira.hibernatetest.repository;
+package me.micopiira.hibernatetest.framework.repository;
 
 import java.util.List;
 
