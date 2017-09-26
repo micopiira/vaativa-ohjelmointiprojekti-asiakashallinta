@@ -27,11 +27,14 @@ public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
 
 	private <S> S transactional(Function<EntityManager, S> function) {
 		final EntityManager entityManager = entityManagerFactory.createEntityManager();
-		entityManager.getTransaction().begin();
-		final S result = function.apply(entityManager);
-		entityManager.getTransaction().commit();
-		entityManager.close();
-		return result;
+		try {
+			entityManager.getTransaction().begin();
+			final S result = function.apply(entityManager);
+			entityManager.getTransaction().commit();
+			return result;
+		} finally {
+			entityManager.close();
+		}
 	}
 
 	@Override
