@@ -29,7 +29,8 @@ public class CustomerController extends Controller {
 
 	public Response create() {
 		final Customer customer = new Customer();
-		customer.setName(getRequiredParameter("name"));
+		customer.setFirstName(getRequiredParameter("fname"));
+		customer.setLastName(getRequiredParameter("lname"));
 		try {
 			customerRepository.save(customer);
 			addMessage("customer.created");
