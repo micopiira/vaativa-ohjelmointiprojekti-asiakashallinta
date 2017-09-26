@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setBundle basename="messages"/>
+<fmt:setLocale value="fi_FI" scope="application"/>
+<fmt:setBundle basename="messages" scope="application"/>
 <!doctype html>
-<html lang="en">
+<html lang="${pageContext.request.locale.language}">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport"
@@ -14,10 +15,10 @@
 	<script src="${pageContext.request.contextPath}/dist/bundle.js"></script>
 </head>
 <body>
-<div class="container pt-2">
-	<jsp:include page="/_messages.jsp"/>
-	<jsp:include page="_table.jsp"/>
-	<jsp:include page="_form.jsp"/>
-</div>
+	<div class="container pt-2">
+		<jsp:include page="/_messages.jsp"/>
+		<jsp:include page="_table.jsp"/>
+		<jsp:include page="_form.jsp"/>
+	</div>
 </body>
 </html>

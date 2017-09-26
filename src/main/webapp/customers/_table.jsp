@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setBundle basename="messages"/>
 <jsp:useBean id="customers" scope="request" type="java.util.List<me.micopiira.hibernatetest.domain.Customer>"/>
 
 <h1><fmt:message key="title"/></h1>

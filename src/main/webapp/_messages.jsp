@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setBundle basename="messages"/>
 
 <c:if test="${not empty sessionScope.messages}">
 	<jsp:useBean id="messages" scope="session" type="java.util.List<java.lang.String>"/>
