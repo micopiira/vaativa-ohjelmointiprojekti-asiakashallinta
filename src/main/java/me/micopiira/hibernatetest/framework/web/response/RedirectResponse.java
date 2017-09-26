@@ -13,6 +13,6 @@ public class RedirectResponse implements Response {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		response.sendRedirect(s);
+		response.sendRedirect(request.getContextPath() + s);
 	}
 }
