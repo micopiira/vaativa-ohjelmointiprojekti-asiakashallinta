@@ -9,7 +9,12 @@
 </c:forEach>
 
 <label for="${param.fieldName}"><fmt:message key="${param.label}"/></label>
-<input type="text" name="${param.fieldName}" class="form-control ${isInvalid ? 'is-invalid' : not empty constraintViolations ? 'is-valid' : ''}" id="${param.fieldName}" aria-describedby="${param.fieldName}">
+<input type="text"
+       name="${param.fieldName}"
+       class="form-control ${isInvalid ? 'is-invalid' : not empty constraintViolations ? 'is-valid' : ''}"
+       id="${param.fieldName}"
+       aria-describedby="${param.fieldName}"
+		value="${param[param.fieldName]}">
 <c:if test="${isInvalid}">
 	<div class="invalid-feedback">
 		<c:forEach items="${constraintViolations}" var="constraintViolation">

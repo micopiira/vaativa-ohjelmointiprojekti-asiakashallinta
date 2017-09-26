@@ -35,10 +35,11 @@ public class CustomerController extends Controller {
 			customerRepository.save(customer);
 			addMessage("customer.created");
 			getRequest().getSession().removeAttribute("constraintViolations");
+			return new RedirectResponse("/");
 		} catch (ConstraintViolationException e) {
 			getRequest().getSession().setAttribute("constraintViolations", e.getConstraintViolations());
+			return list();
 		}
-		return new RedirectResponse("/");
 	}
 
 	public Response list() {
