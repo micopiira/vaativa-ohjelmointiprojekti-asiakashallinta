@@ -20,7 +20,7 @@ public abstract class Controller {
 	}
 
 	protected String getRequiredParameter(String s) {
-		return Optional.ofNullable(getRequest().getParameter(s)).orElseThrow(() -> new RuntimeException("Missing required paramter '" + s + "'"));
+		return Optional.ofNullable(getRequest().getParameter(s)).orElseThrow(() -> new RuntimeException("Missing required parameter '" + s + "'"));
 	}
 
 	protected HttpServletRequest getRequest() {
