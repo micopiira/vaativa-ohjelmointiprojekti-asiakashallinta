@@ -2,12 +2,15 @@ package me.micopiira.hibernatetest.web;
 
 import me.micopiira.hibernatetest.domain.Customer;
 import me.micopiira.hibernatetest.domain.CustomerRepository;
-import me.micopiira.hibernatetest.framework.web.Controller;
-import me.micopiira.hibernatetest.framework.web.response.ForwardResponse;
-import me.micopiira.hibernatetest.framework.web.response.RedirectResponse;
-import me.micopiira.hibernatetest.framework.web.response.Response;
+import me.micopiira.framework.web.Controller;
+import me.micopiira.framework.web.response.ForwardResponse;
+import me.micopiira.framework.web.response.RedirectResponse;
+import me.micopiira.framework.web.response.Response;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.stream.Collectors;
 
 public class CustomerController extends Controller {
 
@@ -27,8 +30,12 @@ public class CustomerController extends Controller {
 	public Response create() {
 		final Customer customer = new Customer();
 		customer.setName(getRequiredParameter("name"));
-		customerRepository.save(customer);
-		addMessage("customer.created");
+		try {
+			customerRepository.save(customer);
+			addMessage("customer.created");
+		} catch (ConstraintViolationException e) {
+			addMessage(e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining()));
+		}
 		return new RedirectResponse("/");
 	}
 

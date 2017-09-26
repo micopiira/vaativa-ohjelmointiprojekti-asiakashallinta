@@ -1,15 +1,8 @@
 package me.micopiira.hibernatetest.web;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import me.micopiira.hibernatetest.domain.CustomerRepository;
-import me.micopiira.hibernatetest.jpa.JpaCustomerRepository;
-import me.micopiira.hibernatetest.web.CustomerController;
-import me.micopiira.hibernatetest.framework.web.response.Response;
+import me.micopiira.framework.web.response.Response;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
