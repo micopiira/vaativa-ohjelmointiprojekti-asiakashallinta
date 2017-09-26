@@ -29,13 +29,14 @@ public class CustomerController extends Controller {
 
 	public Response create() {
 		final Customer customer = new Customer();
-		customer.setFirstName(getRequiredParameter("fname"));
-		customer.setLastName(getRequiredParameter("lname"));
+		customer.setFirstName(getRequiredParameter("firstName"));
+		customer.setLastName(getRequiredParameter("lastName"));
 		try {
 			customerRepository.save(customer);
 			addMessage("customer.created");
+			getRequest().getSession().removeAttribute("constraintViolations");
 		} catch (ConstraintViolationException e) {
-			addMessage(e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining()));
+			getRequest().getSession().setAttribute("constraintViolations", e.getConstraintViolations());
 		}
 		return new RedirectResponse("/");
 	}
