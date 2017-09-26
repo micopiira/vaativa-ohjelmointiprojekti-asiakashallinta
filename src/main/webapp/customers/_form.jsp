@@ -3,7 +3,7 @@
 <fmt:setBundle basename="messages"/>
 
 <h2><fmt:message key="customer.add"/></h2>
-<form action="${pageContext.request.contextPath}/create" method="POST">
+<form action="<c:url value="/create"/>" method="POST">
 	<div class="form-group">
 		<label for="name"><fmt:message key="customer.name"/></label>
 		<input type="text" name="name" class="form-control" id="name" aria-describedby="name">

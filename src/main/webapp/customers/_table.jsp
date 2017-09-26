@@ -20,7 +20,7 @@
 					<td>${customer.name}</td>
 					<td>
 						<a class="btn btn-outline-danger"
-						   href="${pageContext.request.contextPath}/delete?id=${customer.id}"
+						   href="<c:url value="/delete?id=${customer.id}"/>"
 						   aria-label="<fmt:message key="delete"/>">
 							<i class="fa fa-trash" aria-hidden="true"></i>
 						</a>

@@ -11,8 +11,8 @@
 	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title><fmt:message key="title"/></title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/bundle.css">
-	<script src="${pageContext.request.contextPath}/dist/bundle.js"></script>
+	<link rel="stylesheet" href="<c:url value="/dist/bundle.css"/>"/>
+	<script src="<c:url value="/dist/bundle.js"/>"></script>
 </head>
 <body>
 	<div class="container pt-2">
