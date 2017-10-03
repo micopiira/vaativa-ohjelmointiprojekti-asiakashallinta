@@ -12,8 +12,8 @@ import javax.persistence.EntityManagerFactory;
 public class JpaCustomerRepository extends JpaRepository<Customer, Long> implements CustomerRepository {
 
 	@Autowired
-	public JpaCustomerRepository(EntityManagerFactory entityManagerFactory) {
-		super(entityManagerFactory, Customer.class);
+	public JpaCustomerRepository() {
+		super(Customer.class);
 	}
 
 }

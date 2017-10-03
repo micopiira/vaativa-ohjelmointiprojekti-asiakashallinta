@@ -4,67 +4,48 @@ import me.micopiira.framework.repository.CrudRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@Transactional
 public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
 
-	private final EntityManagerFactory entityManagerFactory;
+	@PersistenceContext
+	protected EntityManager entityManager;
 	private final Class<T> entityClass;
 
-	protected JpaRepository(EntityManagerFactory entityManagerFactory, Class<T> entityClass) {
-		this.entityManagerFactory = entityManagerFactory;
+	protected JpaRepository(Class<T> entityClass) {
 		this.entityClass = entityClass;
 	}
 
-	private void transactionalVoid(Consumer<EntityManager> consumer) {
-		transactional(entityManager -> {
-			consumer.accept(entityManager);
-			return null;
-		});
-	}
-
-	private <S> S transactional(Function<EntityManager, S> function) {
-		final EntityManager entityManager = entityManagerFactory.createEntityManager();
-		try {
-			entityManager.getTransaction().begin();
-			final S result = function.apply(entityManager);
-			entityManager.getTransaction().commit();
-			return result;
-		} finally {
-			entityManager.close();
-		}
-	}
 
 	@Override
 	public List<T> findAll() {
-		return transactional(em -> em.createQuery("from " + entityClass.getName(), entityClass).getResultList());
+		return entityManager.createQuery("from " + entityClass.getName(), entityClass).getResultList();
 	}
 
 	@Override
 	public void delete(T entity) {
-		transactionalVoid(em ->
-			em.remove(em.contains(entity) ? entity : em.merge(entity))
-		);
+		entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
 	}
 
 	@Override
 	public T save(T entity) {
-		return transactional(em -> {
-			em.persist(entity);
-			return entity;
-		});
+		entityManager.persist(entity);
+		return entity;
 	}
 
 	@Override
 	public T findOne(ID id) {
-		return transactional(em -> em.find(entityClass, id));
+		return entityManager.find(entityClass, id);
 	}
 
 	@Override
 	public void deleteById(ID id) {
-		transactionalVoid(em -> em.remove(em.getReference(entityClass, id)));
+		entityManager.remove(entityManager.getReference(entityClass, id));
 	}
 
 }
