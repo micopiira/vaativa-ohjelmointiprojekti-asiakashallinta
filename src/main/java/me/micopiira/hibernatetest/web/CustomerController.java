@@ -2,49 +2,59 @@ package me.micopiira.hibernatetest.web;
 
 import me.micopiira.hibernatetest.domain.Customer;
 import me.micopiira.hibernatetest.domain.CustomerRepository;
-import me.micopiira.framework.web.Controller;
-import me.micopiira.framework.web.response.ForwardResponse;
-import me.micopiira.framework.web.response.RedirectResponse;
-import me.micopiira.framework.web.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
-public class CustomerController extends Controller {
+@Controller
+public class CustomerController {
 
 	private final CustomerRepository customerRepository;
 
-	@Inject
+	@Autowired
 	public CustomerController(CustomerRepository customerRepository) {
 		this.customerRepository = customerRepository;
 	}
 
-	public Response delete() {
-		customerRepository.deleteById(Long.valueOf(getRequiredParameter("id")));
-		addMessage("customer.deleted");
-		return new RedirectResponse("/");
+	@GetMapping("/delete")
+	public String delete(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
+		customerRepository.deleteById(id);
+		redirectAttributes.addAttribute("messages", Collections.singletonList("customer.deleted"));
+		return "redirect:/";
 	}
 
-	public Response create() {
+	@PostMapping("/create")
+	public String create(@RequestParam("firstName") String firstName,
+	                       @RequestParam("lastName") String lastName,
+	                     RedirectAttributes redirectAttributes) {
 		final Customer customer = new Customer();
-		customer.setFirstName(getRequiredParameter("firstName"));
-		customer.setLastName(getRequiredParameter("lastName"));
+		customer.setFirstName(firstName);
+		customer.setLastName(lastName);
 		try {
 			customerRepository.save(customer);
-			addMessage("customer.created");
-			getRequest().getSession().removeAttribute("constraintViolations");
-			return new RedirectResponse("/");
+			redirectAttributes.addAttribute("messages", Collections.singletonList("customer.created"));
+			// getRequest().getSession().removeAttribute("constraintViolations");
 		} catch (ConstraintViolationException e) {
-			getRequest().getSession().setAttribute("constraintViolations", e.getConstraintViolations());
-			return list();
+			// getRequest().getSession().setAttribute("constraintViolations", e.getConstraintViolations());
 		}
+		return "redirect:/";
 	}
 
-	public Response list() {
-		getRequest().setAttribute("customers", customerRepository.findAll());
-		return new ForwardResponse("/customers/list.jsp");
+	@GetMapping("/")
+	public String list(Model model) {
+		model.addAttribute("customers", customerRepository.findAll());
+		return "customers/list";
 	}
 
 }

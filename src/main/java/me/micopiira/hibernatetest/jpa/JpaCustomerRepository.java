@@ -1,18 +1,17 @@
 package me.micopiira.hibernatetest.jpa;
 
-import com.google.inject.Provides;
 import me.micopiira.hibernatetest.domain.Customer;
 import me.micopiira.hibernatetest.domain.CustomerRepository;
 import me.micopiira.framework.repository.jpa.JpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
 
-@Singleton
+@Repository
 public class JpaCustomerRepository extends JpaRepository<Customer, Long> implements CustomerRepository {
 
-	@Inject
+	@Autowired
 	public JpaCustomerRepository(EntityManagerFactory entityManagerFactory) {
 		super(entityManagerFactory, Customer.class);
 	}
