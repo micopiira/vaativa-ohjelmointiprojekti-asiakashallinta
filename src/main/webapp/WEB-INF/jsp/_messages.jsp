@@ -3,7 +3,7 @@
 
 
 <c:if test="${not empty requestScope.messages}">
-	<jsp:useBean id="messages" type="java.util.List"/>
+	<jsp:useBean id="messages" type="java.util.List<java.lang.String>" scope="request"/>
 	<c:forEach items="${messages}" var="message">
 		<div class="alert alert-info" role="alert">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close">

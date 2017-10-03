@@ -30,7 +30,7 @@ public class CustomerController {
 	@GetMapping("/delete")
 	public String delete(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
 		customerRepository.deleteById(id);
-		redirectAttributes.addAttribute("messages", Collections.singletonList("customer.deleted"));
+		redirectAttributes.addFlashAttribute("messages", Collections.singletonList("customer.deleted"));
 		return "redirect:/";
 	}
 
@@ -43,7 +43,7 @@ public class CustomerController {
 		customer.setLastName(lastName);
 		try {
 			customerRepository.save(customer);
-			redirectAttributes.addAttribute("messages", Collections.singletonList("customer.created"));
+			redirectAttributes.addFlashAttribute("messages", Collections.singletonList("customer.created"));
 			// getRequest().getSession().removeAttribute("constraintViolations");
 		} catch (ConstraintViolationException e) {
 			// getRequest().getSession().setAttribute("constraintViolations", e.getConstraintViolations());
