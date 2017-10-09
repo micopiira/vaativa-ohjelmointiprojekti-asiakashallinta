@@ -17,7 +17,7 @@
 			<c:forEach items="${customers}" var="customer">
 				<tr>
 					<th scope="row">${customer.id}</th>
-					<td>${customer.fullName}</td>
+					<td><c:out value="${customer.fullName}"/></td>
 					<td>
 						<a class="btn btn-outline-danger"
 						   href="<c:url value="/delete?id=${customer.id}"/>"
