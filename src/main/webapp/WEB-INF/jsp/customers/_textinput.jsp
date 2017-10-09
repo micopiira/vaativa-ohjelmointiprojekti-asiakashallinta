@@ -1,26 +1,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--@elvariable id="constraintViolations" type="java.util.List<javax.validation.ConstraintViolation<me.micopiira.hibernatetest.domain.Customer>>"--%>
 
-<c:forEach items="${constraintViolations}" var="constraintViolation">
-	<c:if test="${constraintViolation.propertyPath eq param.fieldName}">
-		<c:set var="isInvalid" value="${true}"/>
-	</c:if>
-</c:forEach>
+<jsp:useBean id="bindingResult" scope="request" type="org.springframework.validation.BindingResult"/>
 
 <label for="${param.fieldName}"><fmt:message key="${param.label}"/></label>
 <input type="text"
        name="${param.fieldName}"
-       class="form-control ${isInvalid ? 'is-invalid' : not empty constraintViolations ? 'is-valid' : ''}"
+       class="form-control ${bindingResult.hasFieldErrors(param.fieldName) ? 'is-invalid' : bindingResult.hasErrors() ? 'is-valid' : ''}"
        id="${param.fieldName}"
        aria-describedby="${param.fieldName}"
-		value="${param[param.fieldName]}">
-<c:if test="${isInvalid}">
+		value="${param.value}">
+<c:if test="${bindingResult.hasFieldErrors(param.fieldName)}">
 	<div class="invalid-feedback">
-		<c:forEach items="${constraintViolations}" var="constraintViolation">
-			<c:if test="${constraintViolation.propertyPath eq param.fieldName}">
-				${constraintViolation.message}
-			</c:if>
+		<c:forEach items="${bindingResult.getFieldErrors(param.fieldName)}" var="error">
+			${error.defaultMessage}
 		</c:forEach>
 	</div>
 </c:if>
