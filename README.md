@@ -4,6 +4,8 @@
 
 To modify settings like database connection properties you can edit the `src/main/resources/application.properties` file.
 
+Tables should be automatically created by Hibernate as long as the connection settings are correct.
+
 All settings can also be overridden using environment variables.
 
 ## Building
