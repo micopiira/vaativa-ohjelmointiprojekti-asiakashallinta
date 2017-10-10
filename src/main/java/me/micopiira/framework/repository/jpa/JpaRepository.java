@@ -3,12 +3,9 @@ package me.micopiira.framework.repository.jpa;
 import me.micopiira.framework.repository.CrudRepository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 @Transactional
 public abstract class JpaRepository<T, ID> implements CrudRepository<T, ID> {
